@@ -104,6 +104,12 @@ namespace Rc
 					defaults: new { action = "Index" });
 				
 				routes.MapRoute(
+					name:"contentRoute",
+					template:"{action}/{id?}",
+					defaults:new {controller="Home"}
+				);
+				
+				routes.MapRoute(
 					name:"default",
 					template:"{controller}/{action}/{id?}",
 					defaults:new {controller="Home",action = "Index"}

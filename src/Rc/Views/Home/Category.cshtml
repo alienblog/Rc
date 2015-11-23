@@ -18,7 +18,7 @@
 			<div class="row">
 			<div class="col-xs-9">
 				<p>@article.Summary</p>
-				<p class="lead"><button class="btn btn-default">Read More</button></p>
+				<p class="lead"><a class="btn btn-default" asp-controller="Home" asp-action="Article" asp-route-id="@article.Id">Read More</a></p>
 				<p class="pull-right">
 					@foreach(var tag in article.Tags){
 						<span class="label label-default">@tag.Name</span>
@@ -28,7 +28,7 @@
 					<li>
 						<a href="#">@((DateTime.Now.Day - article.CreatedDate.Day)) Days Ago</a>
 					</li>
-					<li>
+					<li style="display:none;">
 						<a href="#"><i class="glyphicon glyphicon-comment"></i> 4 Comments</a>
 					</li>
 				</ul>

@@ -72,7 +72,6 @@ namespace Rc.Areas.Api.Dtos
 
             foreach (var articleTag in entity.ArticleTags)
             {
-                System.Console.WriteLine(articleTag.Tag);
                 dto.Tags.Add(articleTag.Tag.ToDto());
             }
 

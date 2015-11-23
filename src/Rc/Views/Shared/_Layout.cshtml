@@ -32,7 +32,7 @@
             foreach(var category in categories)
             {
               <li>
-                <a href="#">@category.Name</a>
+                <a asp-action="Category" asp-controller="Home" asp-route-id="@category.Id">@category.Name</a>
               </li>
             }
         }
@@ -106,7 +106,7 @@
 
 <div class="container" id="footer">
   <div class="row">
-    <div class="col col-sm-12">
+    <div class="col col-sm-12" style="display:none;">
       
       <h1>Follow Us</h1>
       <div class="btn-group">
@@ -158,8 +158,4 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
-
-    Status API Training Shop Blog About Pricing 
-
-    © 2015 GitHub, Inc. Terms Privacy Security Contact Help 
 
