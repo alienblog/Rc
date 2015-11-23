@@ -1,0 +1,11 @@
+{
+	"AppSettings":{
+		"SiteTitle":"Rc",
+		"SubSiteTitle":"Blog Made By ASP.NET5"
+	},
+	"DefaultAdminUsername": "admin@zengyinghao.cn",
+    "DefaultAdminPassword": "P@ssw0rd",
+	"Data":{
+		"ConnectionString":"Data Source=rcdb.sqlite"
+	}
+}

@@ -1,0 +1,51 @@
+{
+  "version": "1.0.0-*",
+  "description": "Rc Console Application",
+  "authors": [ "" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "tooling": {
+    "defaultNamespace": "Rc"
+  },
+
+  "dependencies": {
+    "EntityFramework.SQLite": "7.0.0-rc1-final",
+    "Microsoft.AspNet.Antiforgery": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Hosting":"1.0.0-rc1-15988",
+    "Microsoft.AspNet.Server.WebListener":"1.0.0-rc1-15940",
+    "Microsoft.AspNet.Mvc":"6.0.0-rc1-16394",
+    "Microsoft.AspNet.Mvc.TagHelpers":"6.0.0-rc-16394",
+    "Microsoft.AspNet.Session": "1.0.0-rc1-final",
+    "Microsoft.AspNet.StaticFiles":"1.0.0-rc1-15925",
+    "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Diagnostics":"1.0.0-rc1-16149",
+    "Microsoft.AspNet.Diagnostics.Entity":"7.0.0-rc1-16149",
+    "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
+    "Microsoft.Extensions.CodeGenerators.Mvc":"1.0.0-rc1-16042",
+    "Microsoft.Extensions.Configuration":"1.0.0-rc1-15842",
+    "Microsoft.Extensions.Configuration.CommandLine":"1.0.0-rc1-15842",
+    "Microsoft.Extensions.Configuration.Json":"1.0.0-rc1-15842",
+    "Microsoft.Extensions.Logging.Console":"1.0.0-rc1-15837",
+    "EntityFramework.Commands":"7.0.0-rc1-16348"
+  },
+
+  "commands": {
+    "gen": "Microsoft.Extensions.CodeGeneration",
+    "run":"run server.urls=http://localhost:5003 ASPNET_ENV=Development",
+    "ef": "EntityFramework.Commands"
+  },
+
+  "frameworks": {
+    "dnxcore50": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Collections": "4.0.11-beta-23516",
+        "System.Console": "4.0.0-beta-23516",
+        "System.Linq": "4.0.1-beta-23516",
+        "System.Threading": "4.0.11-beta-23516",
+        "System.Runtime.Serialization.Primitives":"4.1.0-beta-23516"
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+@inject IOptions<AppSettings> AppSettings
+@using Rc.Areas.Api.Dtos
+@using Rc.Core.Models
+@{
+	var article = ViewBag.Article as ArticleDto;
+	
+    ViewBag.Title = article.Title;
+}
+
+<div class="row">   
+	<div class="col-md-11 col-sm-10 col-md-offset-1 col-sm-offset-2">
+		<h2 class="">@article.Title</h3>
+		<hr>
+		<div class="row">
+		<div class="col-xs-9">
+			@Html.Raw(article.Content)
+			
+			<hr>
+			<p class="pull-right">
+				@foreach(var tag in article.Tags){
+					<span class="label label-default">@tag?.Name</span>
+				}
+			</p>
+			<ul class="list-inline">
+					<li>
+						<a href="#">@((DateTime.Now.Day - article.CreatedDate.Day)) Days Ago</a>
+					</li>
+					<li>
+						<a href="#"><i class="glyphicon glyphicon-comment"></i> 4 Comments</a>
+					</li>
+					<li>
+						<a asp-action="Category" asp-controller="Home" asp-route-id="@article.Category.Id"><i class="glyphicon glyphicon-share"></i> @article.Category.Name</a>
+					</li>
+				</ul>
+		</div>
+		<div class="col-xs-3"></div>
+		</div>
+		<br><br>
+	</div>
+</div>

@@ -1,0 +1,57 @@
+@inject IOptions<AppSettings> AppSettings
+@using Rc.Areas.Api.Dtos
+@using Rc.Core.Models
+@{
+    ViewBag.Title = "首页";
+	var articles = ViewBag.Articles as PagedList<ArticleDto>;
+}
+
+@foreach(var article in articles.Rows){
+	<div class="row">    
+		<br>
+		<div class="col-md-2 col-sm-3 text-center">
+			<a class="story-img" asp-controller="Home" asp-action="Article" asp-route-id="@article.Id"><img src="@article.PicUrl" style="width:100px;height:100px" class="img-circle"></a>
+		</div>
+		<div class="col-md-10 col-sm-9">
+			<h3>@article.Title</h3>
+			<div class="row">
+			<div class="col-xs-9">
+				<p>@article.Summary</p>
+				<p class="lead"><a class="btn btn-default" asp-controller="Home" asp-action="Article" asp-route-id="@article.Id">Read More</a></p>
+				<p class="pull-right">
+					@foreach(var tag in article.Tags){
+						<span class="label label-default">@tag.Name</span>
+					}
+				</p>
+				<ul class="list-inline">
+					<li>
+						<a href="#">@((DateTime.Now.Day - article.CreatedDate.Day)) Days Ago</a>
+					</li>
+					<li>
+						<a href="#"><i class="glyphicon glyphicon-comment"></i> 4 Comments</a>
+					</li>
+					<li>
+						<a asp-action="Category" asp-controller="Home" asp-route-id="@article.Category.Id"><i class="glyphicon glyphicon-share"></i> @article.Category.Name</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-xs-3"></div>
+			</div>
+			<br><br>
+		</div>
+	</div>
+	<hr>
+}
+
+<div class="row">
+	<div class="col-md-1">
+		@if(articles.HasPrevPage){
+			<a asp-route-id="@(articles.Page-1)" class="btn">Prev</a>
+		}
+	</div>
+	<div class="col-md-1 col-md-offset-10">
+		@if(articles.HasNextPage){
+			<a asp-route-id="@(articles.Page+1)" class="btn">Next</a>	
+		}
+	</div>
+</div>

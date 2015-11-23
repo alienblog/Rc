@@ -1,0 +1,55 @@
+@inject Microsoft.Extensions.PlatformAbstractions.IRuntimeEnvironment env
+
+@{
+	ViewBag.Title = "Dashboard";
+}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">Dashboard</h1>
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<h3>Server Information</h3>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped">
+						<tbody>
+							<tr>
+								<td>Runtime Type</td>
+								<td>@($"{env.RuntimeType}")</td>
+							</tr>
+							<tr>
+								<td>Operating System</td>
+								<td>@($"{env.OperatingSystem}")</td>
+							</tr>
+							<tr>
+								<td>Operating System Version</td>
+								<td>@($"{env.OperatingSystemVersion}")</td>
+							</tr>
+							<tr>
+								<td>Architecture</td>
+								<td>@($"{env.RuntimeArchitecture}")</td>
+							</tr>
+							<tr>
+								<td>Runtime Path</td>
+								<td>@($"{env.RuntimePath}")</td>
+							</tr>
+							<tr>
+								<td>Runtime Version</td>
+								<td>@($"{env.RuntimeVersion}")</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+

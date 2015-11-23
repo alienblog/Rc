@@ -1,0 +1,100 @@
+@{
+	var article = (ViewBag.Article as Rc.Models.Article);
+}
+
+@section head{
+	<link rel="stylesheet" href="~/Scripts/editor/css/editormd.min.css">
+	<link rel="stylesheet" href="~/Scripts/bootstrap-tags/css/bootstrap-tags.css">
+}
+
+@section scripts{
+	<script src="~/Scripts/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="~/Scripts/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="~/Scripts/admin.js"></script>
+	<script src="~/Scripts/editor/editormd.min.js"></script>
+	<script src="~/Scripts/bootstrap-tags/js/bootstrap-tags.min.js"></script>
+	<script>
+		$(function(){
+			admin.article.edit.init();
+		});
+	</script>
+}
+
+<div class="row" style="display:none;">
+	<div class="col-lg-12">
+		<h1 class="page-header">编辑文章</h1>
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<input type="hidden" name="articleId" value="@article.Id">
+				<div class="row">
+					<div class="form-group">
+						<div class="col-md-7">
+							<div class="input-group">
+								<span class="input-group-addon">标题</span>
+								<input type="text" class="form-control" name="title" value="@article.Title">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group">
+								<span class="input-group-addon">封面</span>
+								<input type="text" class="form-control" name="picUrl" value="@article.PicUrl">
+							</div>
+						</div>
+						<div class="col-md-1">
+							<button type="button" class="btn btn-primary col-md-offset-4" id="btn_save">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div id="editormd">
+					<textarea id="editor-html" style="display:none;">@article.Markdown</textarea>
+				</div>
+			</div>
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="form-group">
+					<label>摘要</label>
+					<textarea name="summary" class="form-control">@article.Summary</textarea>
+				</div>
+			</div>
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="form-group">
+					<div class="col-md-7">
+						<div class="input-group">
+							<div class="input-group-addon">分类</div>
+							<select class="form-control" name="category">
+								@foreach(var c in ViewBag.Categories){
+									if(c.Id == article.Category?.Id){
+										<option value="@c.Id" selected="selected">@c.Name</option>
+									}else{
+										<option value="@c.Id">@c.Name</option>	
+									}
+								}
+							</select>
+						</div>
+					</div>
+					<div id="tags" class="col-md-5">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
