@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using Rc.Core.Mapper;
 using Rc.Models;
 
-namespace Rc.Areas.Api.Dtos
+namespace Rc.Services.Dtos
 {
+    [AutoMapFrom(typeof(Category))]
     public class CategoryDto
     {
         public int Id { get; set; }

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Rc.Models;
 
-namespace Rc.Areas.Api.Dtos
+namespace Rc.Services.Dtos
 {
     public class TagDto
     {

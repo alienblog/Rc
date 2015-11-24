@@ -1,12 +1,7 @@
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authorization;
-using Microsoft.Data.Entity;
-using Rc.Models;
-using Rc.Areas.Api.Dtos;
-using Rc.Data.Repositories;
 using System;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.AspNet.Http;

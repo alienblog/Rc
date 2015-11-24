@@ -5,7 +5,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authorization;
 using Microsoft.Data.Entity;
 using Rc.Models;
-using Rc.Areas.Api.Dtos;
+using Rc.Services.Dtos;
 using Rc.Data.Repositories;
 using System;
 

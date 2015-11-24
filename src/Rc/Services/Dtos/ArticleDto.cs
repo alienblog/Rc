@@ -3,13 +3,14 @@ using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Rc.Models;
+using Rc.Core.Dtos;
+using Rc.Core.Mapper;
 
-namespace Rc.Areas.Api.Dtos
+namespace Rc.Services.Dtos
 {
-    public class ArticleDto
+    [AutoMapFrom(typeof(Article))]
+    public class ArticleDto : AuditedDto
     {
-        public int Id { get; set; }
-
         [Required]
         public string Title { get; set; }
 
@@ -26,8 +27,6 @@ namespace Rc.Areas.Api.Dtos
         public string CategoryName { get; set; }
 
         public CategoryDto Category { get; set; }
-
-        public DateTime CreatedDate { get; set; }
 
         public IList<TagDto> Tags { get; set; }
 

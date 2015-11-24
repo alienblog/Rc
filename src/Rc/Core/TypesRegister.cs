@@ -12,8 +12,15 @@ namespace Rc.Core
     {
         public void RegisterAll(ContainerBuilder builder)
         {
+            var assemblies = GetAssemblies();
             RegisterTypes(builder,typeof(ISingletonDependency)).SingleInstance();
             RegisterTypes(builder,typeof(ITransientDependency)).InstancePerLifetimeScope();
+            
+            foreach(var assembly in assemblies)
+            {
+                var types = assembly.GetTypes();
+                Mapper.MapperBootstrapper.ConfigureMapper(types);
+            }
         }
 
         private Assembly[] GetAssemblies()

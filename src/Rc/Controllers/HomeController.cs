@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
-using Rc.Areas.Api.Dtos;
+using Rc.Services.Dtos;
 using Rc.Data.Repositories;
 using Rc.Core.Models;
 
@@ -97,7 +97,7 @@ namespace Rc.Controllers
             var article = await _articleRepository.AsQueryable().Include(a => a.ArticleTags).FirstOrDefaultAsync(a => a.Id == id);
             var tags = await _tagRepository.GetAllAsync();
 
-            var dto = article.ToDto();
+            var dto = article.Map<ArticleDto>();
 
             dto.Tags = new List<TagDto>();
 
