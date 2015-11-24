@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Rc.Models;
 
 namespace Rc.Areas.Api.Dtos
@@ -11,6 +12,63 @@ namespace Rc.Areas.Api.Dtos
         public string Name { get; set; }
 
         public int ArticleCount { get; set; }
+        
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is TagDto))
+            {
+                return false;
+            }
+
+            //Same instances must be considered as equal
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            //Transient objects are not considered as equal
+            var other = (TagDto)obj;
+
+            //Must have a IS-A relation of types or must be same type
+            var typeOfThis = GetType();
+            var typeOfOther = other.GetType();
+            if (!typeOfThis.IsAssignableFrom(typeOfOther) && !typeOfOther.IsAssignableFrom(typeOfThis))
+            {
+                return false;
+            }
+
+            return Name.Equals(other.Name);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+
+        /// <inheritdoc/>
+        public static bool operator ==(TagDto left, TagDto right)
+        {
+            if (Equals(left, null))
+            {
+                return Equals(right, null);
+            }
+
+            return left.Equals(right);
+        }
+
+        /// <inheritdoc/>
+        public static bool operator !=(TagDto left, TagDto right)
+        {
+            return !(left == right);
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     public static class TagDtoExtensions

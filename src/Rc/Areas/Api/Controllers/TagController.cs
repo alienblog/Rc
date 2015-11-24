@@ -29,7 +29,9 @@ namespace Rc.Areas.Api.Controllers
 		public async Task<IActionResult> GetAll(int? id){
 			var allTags = await _tagRepository.GetAllAsync();
 			if(id.HasValue){
-				var tags = await _tagRepository.AsQueryable().Where(x=>x.ArticleTags.Select(at=>at.ArticleId).Contains(id.Value)).ToListAsync();
+				var tags = await _tagRepository.AsQueryable().Include(t=>t.ArticleTags)
+									.Where(x=>x.ArticleTags.Select(at=>at.ArticleId).Contains(id.Value))
+									.ToListAsync();
 				
 				return Json(new {allTags=allTags.ToDto(),tags=tags.ToDto()});
 			}

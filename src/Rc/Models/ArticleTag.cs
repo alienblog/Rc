@@ -16,11 +16,11 @@ namespace Rc.Models
         public int ArticleId { get; set; }
 
         [ForeignKey("ArticleId")]
-        public Article Article { get; set; }
+        public virtual Article Article { get; set; }
 
         public int TagId { get; set; }
 
         [ForeignKey("TagId")]
-        public Tag Tag { get; set; }
+        public virtual Tag Tag { get; set; }
     }
 }
