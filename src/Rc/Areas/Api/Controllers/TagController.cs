@@ -9,6 +9,7 @@ using Rc.Areas.Api.Dtos;
 using Rc.Data.Repositories;
 using System;
 using Rc.Core;
+using Rc.Core.Repository;
 
 namespace Rc.Areas.Api.Controllers
 {
@@ -16,26 +17,30 @@ namespace Rc.Areas.Api.Controllers
     [Authorize("ManageSite")]
     public class TagController : Controller
     {
-		private readonly ITagRepository _tagRepository;
-		
-		public TagController(
-			ITagRepository tagRepository
-		)
-		{
-			_tagRepository = tagRepository;
-		}
-		
-		[HttpGet]
-		public async Task<IActionResult> GetAll(int? id){
-			var allTags = await _tagRepository.GetAllAsync();
-			if(id.HasValue){
-				var tags = await _tagRepository.AsQueryable().Include(t=>t.ArticleTags)
-									.Where(x=>x.ArticleTags.Select(at=>at.ArticleId).Contains(id.Value))
-									.ToListAsync();
-				
-				return Json(new {allTags=allTags.ToDto(),tags=tags.ToDto()});
-			}
-			return Json(new {allTags=allTags.ToDto()});
-		}
-	}
+        private readonly ITagRepository _tagRepository;
+		private readonly IBaseRepository<ArticleTag> _atRepository;
+
+        public TagController(
+            ITagRepository tagRepository,
+            IBaseRepository<ArticleTag> atRepository
+        )
+        {
+            _tagRepository = tagRepository;
+            _atRepository = atRepository;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll(int? id)
+        {
+            var allTags = await _tagRepository.GetAllAsync();
+            if (id.HasValue)
+            {
+                var ats = _atRepository.AsQueryable().Include(at=>at.Tag).Where(at=>at.ArticleId == id.Value);
+                var tags = await ats.Select(at=>at.Tag).ToListAsync();
+
+                return Json(new { allTags = allTags.ToDto(), tags = tags.ToDto() });
+            }
+            return Json(new { allTags = allTags.ToDto() });
+        }
+    }
 }

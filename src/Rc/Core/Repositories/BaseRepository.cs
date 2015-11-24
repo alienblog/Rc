@@ -27,7 +27,7 @@ namespace Rc.Core.Repository
             return _set.Add(model).Entity;
         }
 
-        public async Task<IList<T>> GetAllAsync()
+        public virtual async Task<IList<T>> GetAllAsync()
         {
             return await _set.ToListAsync();
         }

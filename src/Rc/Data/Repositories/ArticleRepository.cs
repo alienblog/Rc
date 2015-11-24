@@ -1,6 +1,10 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
 using Rc.Core;
 using Rc.Core.Repository;
 using Rc.Models;
+using Microsoft.Data.Entity;
 
 namespace Rc.Data.Repositories
 {
@@ -11,5 +15,10 @@ namespace Rc.Data.Repositories
 			{
 				
 			}
+			
+		public override async Task<IList<Article>> GetAllAsync()
+		{
+			return await AsQueryable().OrderByDescending(a=>a.CreatedDate).ToListAsync();
+		}
 	}
 }

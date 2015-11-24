@@ -87,7 +87,7 @@ namespace Rc.Controllers
             page = page < 1 ? 1 : page;
             var skipCount = (page - 1) * PageSize;
 
-            var data = await queryable.Skip(skipCount).Take(PageSize).ToListAsync();
+            var data = await queryable.OrderByDescending(a=>a.CreatedDate).Skip(skipCount).Take(PageSize).ToListAsync();
 
             return new PagedList<ArticleDto>(data.ToDto(), PageSize, page, totalCount);
         }

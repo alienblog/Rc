@@ -207,3 +207,6 @@ FakesAssemblies/
 
 # Sqlite Files
 *.sqlite
+
+#Upload Folder
+Uploads/
