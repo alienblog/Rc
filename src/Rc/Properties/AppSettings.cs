@@ -5,5 +5,7 @@ namespace Rc
         public string SiteTitle { get; set; }
 
         public string SubSiteTitle { get; set; }
+
+        public string Disqus { get; set; }
     }
 }

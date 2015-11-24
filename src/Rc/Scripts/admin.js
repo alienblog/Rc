@@ -345,7 +345,7 @@ admin.article.edit = {};
         function getPicUrl(md){
             var reg = /\/Uploads[\S]+.[\w]/;
             var results = reg.exec(md);
-            if(results.length>0){
+            if(results && results.length>0){
                 return results[0];
             }
             return "";

@@ -1,7 +1,8 @@
 {
 	"AppSettings":{
 		"SiteTitle":"Rc",
-		"SubSiteTitle":"Blog Made By ASP.NET5"
+		"SubSiteTitle":"Blog Made By ASP.NET5",
+		"Disqus":"helloalien"
 	},
 	"DefaultAdminUsername": "admin@zengyinghao.cn",
     "DefaultAdminPassword": "P@ssw0rd",
