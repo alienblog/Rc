@@ -3,57 +3,66 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Rc.Core.Models;
 
 namespace Rc.Core.Repository
 {
-    public class BaseRepository<T> :IDisposable, IBaseRepository<T> where T : class, IRcModel
+    public class BaseRepository<TModel>:BaseRepository<TModel,int>,IBaseRepository<TModel> where TModel:class,IRcModel
+    {
+        public BaseRepository(
+            IUnitOfWork unitOfWork
+        ):base(unitOfWork)
+        {
+            
+        }
+    }
+    
+    public class BaseRepository<TModel,TPrimaryKey> :IDisposable, IBaseRepository<TModel,TPrimaryKey> where TModel : class, IRcModel<TPrimaryKey>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly DbSet<T> _set;
+        private readonly DbSet<TModel> _set;
 
         public BaseRepository(
             IUnitOfWork unitOfWork
         )
         {
             _unitOfWork = unitOfWork;
-            _set = unitOfWork.Context.Set<T>();
+            _set = unitOfWork.Context.Set<TModel>();
         }
 
-        public T Add(T model)
+        public TModel Add(TModel model)
         {
             return _set.Add(model).Entity;
         }
 
-        public virtual async Task<IList<T>> GetAllAsync()
+        public virtual async Task<IList<TModel>> GetAllAsync()
         {
             return await _set.ToListAsync();
         }
 
-        public async Task<T> GetAsync(int id)
+        public async Task<TModel> GetAsync(TPrimaryKey id)
         {
-            return await _set.FirstOrDefaultAsync(x => x.Id == id);
+            return await _set.FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
-        public void Remove(T model)
+        public void Remove(TModel model)
         {
             _set.Remove(model);
         }
 
-        public void Remove(int id)
+        public void Remove(TPrimaryKey id)
         {
             var model = GetAsync(id).Result;
             Remove(model);
         }
 
-        public T Update(T model)
+        public TModel Update(TModel model)
         {
             return _set.Update(model).Entity;
         }
 
-        public IQueryable<T> AsQueryable()
+        public IQueryable<TModel> AsQueryable()
         {
             return _set.AsQueryable();
         }

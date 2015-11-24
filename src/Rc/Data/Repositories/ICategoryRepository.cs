@@ -1,3 +1,4 @@
+using Rc.Core.Models;
 using Rc.Core.Repository;
 using Rc.Models;
 

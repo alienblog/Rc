@@ -7,21 +7,26 @@ using Rc.Core.Models;
 
 namespace Rc.Core.Repository
 {
-    public interface IBaseRepository<T> : ITransientDependency where T : class, IRcModel
+    public interface IBaseRepository<TModel> : IBaseRepository<TModel, int> where TModel : class, IRcModel
     {
-        T Add(T model);
 
-        T Update(T model);
+    }
 
-        void Remove(int id);
+    public interface IBaseRepository<TModel, TPrimaryKey> : ITransientDependency where TModel : class, IRcModel<TPrimaryKey>
+    {
+        TModel Add(TModel model);
 
-        void Remove(T model);
+        TModel Update(TModel model);
 
-        Task<T> GetAsync(int id);
+        void Remove(TPrimaryKey id);
 
-        Task<IList<T>> GetAllAsync();
+        void Remove(TModel model);
 
-        IQueryable<T> AsQueryable();
+        Task<TModel> GetAsync(TPrimaryKey id);
+
+        Task<IList<TModel>> GetAllAsync();
+
+        IQueryable<TModel> AsQueryable();
 
         Task<int> CountAsync();
     }

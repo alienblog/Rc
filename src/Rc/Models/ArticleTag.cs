@@ -1,18 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Rc.Core.Models;
 
 namespace Rc.Models
 {
-    public class ArticleTag : IRcModel
+    public class ArticleTag : RcModel
     {
-        public int Id { get; set; }
-
         public int ArticleId { get; set; }
 
         [ForeignKey("ArticleId")]
