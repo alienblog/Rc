@@ -29,10 +29,7 @@
 						<a href="#">@((DateTime.Now.Day - article.CreatedDate.Day)) Days Ago</a>
 					</li>
 					<li>
-						<span>
-							<i class="glyphicon glyphicon-comment"></i>
-							<a asp-controller="Home" asp-action="Article" asp-route-id="@article.Id" asp-fragment="disqus_thread"></a>
-						</span>
+						<a asp-controller="Home" asp-action="Article" asp-route-id="@article.Id" asp-fragment="disqus_thread"></a>
 					</li>
 				</ul>
 			</div>
