@@ -1,5 +1,5 @@
 using Autofac;
-using Rc.Data;
+using Rc.Core;
 
 namespace Rc
 {
@@ -7,7 +7,7 @@ namespace Rc
     {
 		protected override void Load(ContainerBuilder builder)
 		{
-				new DataInit().RegisterAll(builder);
+			new TypesRegister().RegisterAll(builder);
 		}
     }
 }
