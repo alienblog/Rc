@@ -1,3 +1,5 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Rc.Models;
 using Microsoft.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 
 namespace Rc
 {
@@ -28,7 +31,7 @@ namespace Rc
 		
 		public IConfiguration Configuration { get; private set; }
 		
-		public void ConfigureServices(IServiceCollection services){
+		public IServiceProvider ConfigureServices(IServiceCollection services){
 			
 			services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 			
@@ -59,7 +62,12 @@ namespace Rc
 					});
 			});
 			
-			new Data.DataInit().RegisterAll(services);
+			var builder = new ContainerBuilder();
+			builder.RegisterModule<AutofacModule>();
+			builder.Populate(services);
+			var container = builder.Build();
+			
+			return container.Resolve<IServiceProvider>();
 		}
 		
 		public void ConfigureDevelopment(IApplicationBuilder app, ILoggerFactory loggerFactory)

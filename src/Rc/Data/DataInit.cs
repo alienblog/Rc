@@ -1,23 +1,22 @@
-using Microsoft.Extensions.DependencyInjection;
+using Autofac;
 using Rc.Core;
+using Rc.Core.Repository;
 using Rc.Data.Repositories;
 
 namespace Rc.Data
 {
     public class DataInit
     {
-        public void RegisterAll(IServiceCollection service)
-        {
-            RegisterRepositories(service);
-        }
-
-        private void RegisterRepositories(IServiceCollection service)
-        {
-            service.AddSingleton<IUnitOfWork, UnitOfWork>();
-
-            service.AddScoped<ICategoryRepository, CategoryRepository>();
-            service.AddScoped<IArticleRepository, ArticleRepository>();
-            service.AddScoped<ITagRepository, TagRepository>();
-        }
+        public void RegisterAll(ContainerBuilder builder)
+		{
+				builder.RegisterType<UnitOfWork>()
+					.As<IUnitOfWork>()
+					.SingleInstance();
+					
+				builder.RegisterGeneric(typeof(BaseRepository<>)).As(typeof(IBaseRepository<>)).InstancePerLifetimeScope();
+				builder.RegisterType<CategoryRepository>().As<ICategoryRepository>().InstancePerLifetimeScope();
+				builder.RegisterType<ArticleRepository>().As<IArticleRepository>().InstancePerLifetimeScope();
+				builder.RegisterType<TagRepository>().As<ITagRepository>().InstancePerLifetimeScope();
+		}
     }
 }
