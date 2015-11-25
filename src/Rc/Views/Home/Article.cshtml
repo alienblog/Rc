@@ -6,6 +6,18 @@
 	
     ViewBag.Title = article.Title;
 }
+@section head{
+	<link href="/Scripts/editor/css/editormd.min.css" rel="stylesheet">
+}
+@section scripts{
+	<script src="/Scripts/editor/lib/prettify.min.js"></script>
+	<script>
+		$(function(){
+			$("pre").addClass("prettyprint");
+     		prettyPrint();
+		});
+	</script>
+}
 
 <div class="row">   
 	<div class="col-md-11 col-sm-10 col-md-offset-1 col-sm-offset-2">
