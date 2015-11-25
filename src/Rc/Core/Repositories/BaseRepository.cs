@@ -8,17 +8,17 @@ using Rc.Core.Models;
 
 namespace Rc.Core.Repository
 {
-    public class BaseRepository<TModel>:BaseRepository<TModel,int>,IBaseRepository<TModel> where TModel:class,IRcModel
+    public class BaseRepository<TModel> : BaseRepository<TModel, int>, IBaseRepository<TModel> where TModel : class, IRcModel
     {
         public BaseRepository(
             IUnitOfWork unitOfWork
-        ):base(unitOfWork)
+        ) : base(unitOfWork)
         {
-            
+
         }
     }
-    
-    public class BaseRepository<TModel,TPrimaryKey> :IDisposable, IBaseRepository<TModel,TPrimaryKey> where TModel : class, IRcModel<TPrimaryKey>
+
+    public class BaseRepository<TModel, TPrimaryKey> : IDisposable, IBaseRepository<TModel, TPrimaryKey> where TModel : class, IRcModel<TPrimaryKey>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly DbSet<TModel> _set;
@@ -75,6 +75,29 @@ namespace Rc.Core.Repository
         void IDisposable.Dispose()
         {
             _unitOfWork.Context.SaveChanges();
+        }
+
+        public async Task<PagedList<TModel>> GetPagedAsync(int limit, int offset, Func<IQueryable<TModel>, IEnumerable<TModel>> filterFunc = null)
+        {
+            var query = AsQueryable();
+
+            if (filterFunc != null)
+            {
+                query = filterFunc.Invoke(query).AsQueryable();
+            }
+
+            var count = await query.CountAsync();
+            var rows = await query.Skip(offset).Take(limit).ToListAsync();
+
+            var page = offset / limit;
+            if (offset % limit > 0)
+            {
+                page++;
+            }
+
+            var pagedList = new Models.PagedList<TModel>(rows, limit, page, count);
+
+            return pagedList;
         }
     }
 }

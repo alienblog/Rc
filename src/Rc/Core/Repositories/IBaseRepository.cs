@@ -29,5 +29,7 @@ namespace Rc.Core.Repository
         IQueryable<TModel> AsQueryable();
 
         Task<int> CountAsync();
+
+        Task<PagedList<TModel>> GetPagedAsync(int limit, int offset, Func<IQueryable<TModel>, IEnumerable<TModel>> filterFunc = null);
     }
 }
