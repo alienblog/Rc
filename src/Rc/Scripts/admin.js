@@ -199,7 +199,7 @@ admin.article.edit = {};
                         field: 'CategoryName',
                         title: '分类'
                     },{
-                        field: 'CreatedDate',
+                        field: 'CreatedDateString',
                         title: '创建时间'
                     }]
             });

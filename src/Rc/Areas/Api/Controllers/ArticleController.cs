@@ -1,14 +1,10 @@
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authorization;
-using Microsoft.Data.Entity;
-using Rc.Models;
 using Rc.Services.Dtos;
-using Rc.Data.Repositories;
 using System;
-using Rc.Core;
+using Rc.Services;
 
 namespace Rc.Areas.Api.Controllers
 {
@@ -16,49 +12,32 @@ namespace Rc.Areas.Api.Controllers
     [Authorize("ManageSite")]
     public class ArticleController : Controller
     {
-        private readonly IArticleRepository _repository;
-        private readonly ICategoryRepository _categoryRepository;
-        
-        private readonly ITagRepository _tagRepository;
-
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IContentServices _contentServices;
 
         public ArticleController(
-            IArticleRepository repository,
-            ICategoryRepository categoryRepository,
-            ITagRepository tagRepository,
-            IUnitOfWork unitOfWork
+            IContentServices contentServices
         )
         {
-            _repository = repository;
-            _categoryRepository = categoryRepository;
-            _tagRepository = tagRepository;
-            _unitOfWork = unitOfWork;
+            _contentServices = contentServices;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll(int limit, int offset)
         {
-            var total = await _repository.CountAsync();
+            var pagedList = await _contentServices.GetPagedArticles(limit, offset);
 
-            var article = await _repository.AsQueryable()
-                .Skip(offset).Take(limit).ToListAsync();
-
-            return Json(new
+            pagedList.Rows = pagedList.Rows.Select(item =>
             {
-                total = total,
-                rows = article.Select(x =>
-                {
-                    var dto = x.ToDto();
-                    dto.Markdown = null;
-                    dto.Content = null;
-                    return dto;
-                })
-            });
+                item.Content = null;
+                item.Markdown = null;
+                return item;
+            }).ToList();
+
+            return Json(pagedList);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrUpdate(ArticleDto article)
+        public async Task<IActionResult> CreateOrUpdate(InputArticleDto article)
         {
             if (ModelState.IsValid)
             {
@@ -67,44 +46,16 @@ namespace Rc.Areas.Api.Controllers
                 {
                     if (article.Id <= 0)
                     {
-                        var entity = article.ToEntity();
-                        if (article.CategoryId != 0)
-                        {
-                            entity.Category = await _categoryRepository.GetAsync(article.CategoryId);
-                        }
-                        var result = _repository.Add(entity);
-                        await _unitOfWork.Context.SaveChangesAsync();
-                        await AddTags(result,article.Tags);
-                        
-                        return Json(new { success = true, data = result?.ToDto() });
+                        var result = await _contentServices.CreateArticle(article);
+
+                        return Json(new { success = true, data = result });
                     }
                     else
                     {
-                        var entity = await _repository.GetAsync(article.Id);
-                        if (article.CategoryId != 0)
-                        {
-                            entity.Category = await _categoryRepository.GetAsync(article.CategoryId);
-                        }
-                        entity.Title = article.Title;
-                        entity.Content = article.Content;
-                        entity.Markdown = article.Markdown;
-                        entity.UpdatedDate = DateTime.Now;
-                        entity.PicUrl = article.PicUrl;
-                        entity.Summary = article.Summary;
 
-                        await AddTags(entity,article.Tags);
+                        var result = _contentServices.UpdateArticle(article);
 
-                        var result = _repository.Update(entity);
-                        
-                        try
-                        {
-                            result?.ToDto();
-                        }
-                        catch (System.Exception ex1)
-                        {
-                            return Json(new { success = false, errorMessage = ex1.StackTrace });
-                        }
-                        return Json(new { success = true, data = result?.ToDto() });
+                        return Json(new { success = true, data = result });
                     }
 
                 }
@@ -126,7 +77,7 @@ namespace Rc.Areas.Api.Controllers
         {
             try
             {
-                _repository.Remove(id);
+                _contentServices.DeleteArticle(id);
             }
             catch (Exception ex)
             {
@@ -139,37 +90,6 @@ namespace Rc.Areas.Api.Controllers
             }
 
             return Json(new { success = true });
-        }
-        
-        private async Task AddTags(Article entity,IList<TagDto> tags){
-            var tagIds = entity.ArticleTags.Select(x=>x.TagId);
-            if(entity.ArticleTags == null)
-                entity.ArticleTags = new List<ArticleTag>();
-            entity.ArticleTags.Clear();
-            foreach (var item in tags)
-            {
-                if(string.IsNullOrEmpty(item.Name))
-                    continue;
-                var tag = await GetOrAddTag(item.Name);
-                if(tagIds.Contains(tag.Id))
-                    continue;
-                entity.ArticleTags.Add(new ArticleTag{
-                   ArticleId = entity.Id,
-                   TagId = tag.Id 
-                });
-            }
-        }
-        
-        private async Task<Tag> GetOrAddTag(string name){
-            var tag = await _tagRepository.AsQueryable().FirstOrDefaultAsync(x=>x.Name == name);
-            if(tag == null){
-                tag = new Tag{
-                    Name = name
-                };
-                var result = _tagRepository.Add(tag);
-                await _unitOfWork.Context.SaveChangesAsync();
-            }
-            return tag;
         }
     }
 }

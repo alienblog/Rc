@@ -24,11 +24,11 @@ namespace Rc.Services.Dtos
 
         public int CategoryId { get; set; }
 
-        public IList<string> Tags { get; set; }
+        public IList<TagDto> Tags { get; set; }
 
         public InputArticleDto()
         {
-            Tags = new List<string>();
+            Tags = new List<TagDto>();
         }
     }
 }

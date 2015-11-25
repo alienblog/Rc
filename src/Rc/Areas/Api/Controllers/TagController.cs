@@ -18,11 +18,11 @@ namespace Rc.Areas.Api.Controllers
     public class TagController : Controller
     {
         private readonly ITagRepository _tagRepository;
-		private readonly IBaseRepository<ArticleTag> _atRepository;
+		private readonly IArticleTagRepository _atRepository;
 
         public TagController(
             ITagRepository tagRepository,
-            IBaseRepository<ArticleTag> atRepository
+            IArticleTagRepository atRepository
         )
         {
             _tagRepository = tagRepository;
