@@ -4,6 +4,7 @@ admin.category = {};
 admin.article = {};
 admin.article.list = {};
 admin.article.edit = {};
+admin.file = {};
 
 (function (a) {
     var TableInit = function () {
@@ -198,7 +199,7 @@ admin.article.edit = {};
                     }, {
                         field: 'CategoryName',
                         title: '分类'
-                    },{
+                    }, {
                         field: 'CreatedDateString',
                         title: '创建时间'
                     }]
@@ -290,24 +291,24 @@ admin.article.edit = {};
                 imageUpload: true,
                 imageUploadURL: '/api/File'
             });
-            
-            
+
+
             var id = $('input[name="articleId"]').val();
             var tagUrl = '/api/Tag';
-            if(id){
-                tagUrl+="?id="+id;
+            if (id) {
+                tagUrl += "?id=" + id;
             }
-            $.get(tagUrl,function(result){
-                
-                var suggestions=[];
+            $.get(tagUrl, function (result) {
+
+                var suggestions = [];
                 var tags = [];
-                if(result.allTags){
-                    suggestions = result.allTags.map(function(t){
+                if (result.allTags) {
+                    suggestions = result.allTags.map(function (t) {
                         return t.Name;
                     });
                 }
-                if(result.tags){
-                    tags = result.tags.map(function(t){
+                if (result.tags) {
+                    tags = result.tags.map(function (t) {
                         return t.Name;
                     });
                 }
@@ -334,18 +335,18 @@ admin.article.edit = {};
             postdata.Markdown = editor.getMarkdown();
             postdata.Content = editor.getHTML();
             postdata.PicUrl = $('input[name="picUrl"]').val();
-            postdata.Tags = tagCtl.getTags().map(function(t){
-               return {Name:t} 
+            postdata.Tags = tagCtl.getTags().map(function (t) {
+                return { Name: t }
             });
-            if(!postdata.PicUrl){
+            if (!postdata.PicUrl) {
                 postdata.PicUrl = getPicUrl(postdata.Markdown);
             }
         };
-        
-        function getPicUrl(md){
+
+        function getPicUrl(md) {
             var reg = /\/Uploads[\S]+.[\w]/;
             var results = reg.exec(md);
-            if(results && results.length>0){
+            if (results && results.length > 0) {
                 return results[0];
             }
             return "";
@@ -399,3 +400,60 @@ admin.article.edit = {};
         oButton.init();
     }
 })(admin.article.edit);
+
+(function (file) {
+
+    function getParam(type, path) {
+        return {
+            selectType: type,
+            path: path
+        };
+    }
+
+    function getFolder(path, cb) {
+        var param = getParam("folder", path);
+        $.get("/api/file", param, cb);
+    }
+
+    function render(folder) {
+        var box = $("#fileContainer");
+        var folders = "";
+        var files = "";
+        
+        if(folder.FullName!="\\"){
+            var path = folder.FullName.replace(new RegExp(/(\\)/g),'\\\\')
+            folders = '<div class="col-md-1" onclick="admin.file.load(\'' + path.replace('\\\\'+folder.Name,'') + '\')"><img class="col-md-12" src="/Contents/images/folder.png" /><span class="col-md-12">..\\</span></div>';
+        }
+
+        for (var i = 0; i < folder.SubFolders.length; i++) {
+            var path = folder.SubFolders[i].FullName.replace(new RegExp(/(\\)/g),'\\\\')
+            var item = '<div class="col-md-1" onclick="admin.file.load(\'' + path + '\')"><img class="col-md-12" src="/Contents/images/folder.png" /><span class="col-md-12">' + folder.SubFolders[i].Name + '</span></div>';
+            folders+=item;
+        }
+        for(var i = 0;i<folder.Files.length;i++){
+            var file = folder.Files[i];
+            var imgUrl = "/Contents/images/file.png";
+            if(file.IsImage){
+                imgUrl = file.Url;
+            }
+            var item = '<div class="col-md-1"><img class="col-md-12" src="'+imgUrl+'" title="'+file.FileName+'" /><input type="text" onfocus="this.select()" onclick="this.select()" class="col-md-12" value="'+file.Url+'" readonly></div>';
+            files+=item;
+        }
+        box.html(folders+files);
+    }
+
+    file.load = function (path) {
+        path = path||"\\";
+        getFolder(path, function (data) {
+            if (data.success) {
+                console.log(data.result);
+                render(data.result);
+            }
+        });
+    }
+
+    file.init = function () {
+        file.load('\\');
+    }
+
+})(admin.file);

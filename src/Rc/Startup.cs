@@ -11,6 +11,7 @@ using Rc.Models;
 using Microsoft.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using Rc.Core.Ioc;
 
 namespace Rc
 {
@@ -62,12 +63,9 @@ namespace Rc
 					});
 			});
 			
-			var builder = new ContainerBuilder();
-			builder.RegisterModule<AutofacModule>();
-			builder.Populate(services);
-			var container = builder.Build();
+			RcContainer.Build(services);
 			
-			return container.Resolve<IServiceProvider>();
+			return RcContainer.Resolve<IServiceProvider>();
 		}
 		
 		public void ConfigureDevelopment(IApplicationBuilder app, ILoggerFactory loggerFactory)
@@ -126,6 +124,7 @@ namespace Rc
 				routes.MapRoute(
                     name: "api",
                     template: "api/{controller}/{id?}");
+					
 			});
 			
 			InitialData.InitalizeRcDatabaseAsync(app.ApplicationServices).Wait();

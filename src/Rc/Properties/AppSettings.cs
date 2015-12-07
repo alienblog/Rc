@@ -7,5 +7,7 @@ namespace Rc
         public string SubSiteTitle { get; set; }
 
         public string Disqus { get; set; }
+
+        public string UploadPath { get; set; }
     }
 }
