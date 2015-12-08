@@ -79,7 +79,7 @@ namespace Rc.Core.Repository
 
         public async Task<PagedList<TModel>> GetPagedAsync(int limit, int offset, Func<IQueryable<TModel>, IEnumerable<TModel>> filterFunc = null)
         {
-            var query = AsQueryable();
+	        var query = AsQueryable();
 
             if (filterFunc != null)
             {

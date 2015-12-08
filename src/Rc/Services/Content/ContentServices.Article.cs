@@ -17,7 +17,10 @@ namespace Rc.Services
         public async Task<PagedList<ArticleDto>> GetPagedArticles(int limit, int offset, bool includeDraft = false)
         {
 
-            var pagedArticle = await _articleRepository.GetPagedAsync(limit, offset, a => a.Where(x => x.IsDraft == includeDraft || !x.IsDraft));
+	        var pagedArticle =
+		        await
+			        _articleRepository.GetPagedAsync(limit, offset,
+				        a => a.Where(x => x.IsDraft == includeDraft || !x.IsDraft).OrderByDescending(x => x.CreatedDate));
 
             return new PagedList<ArticleDto>(
                     pagedArticle.Rows.Map<IList<ArticleDto>>(),
@@ -53,6 +56,7 @@ namespace Rc.Services
             entity.UpdatedDate = DateTime.Now;
             entity.PicUrl = input.PicUrl;
             entity.Summary = input.Summary;
+	        entity.IsDraft = input.IsDraft;
 
             await AddTags(entity, input.Tags);
 
