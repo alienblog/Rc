@@ -24,6 +24,8 @@ namespace Rc.Services.Dtos
 
         public int CategoryId { get; set; }
 
+		public bool IsDraft { get; set; }
+
         public IList<TagDto> Tags { get; set; }
 
         public InputArticleDto()

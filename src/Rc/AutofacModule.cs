@@ -7,7 +7,7 @@ namespace Rc
     {
 		protected override void Load(ContainerBuilder builder)
 		{
-			new TypesRegister().RegisterAll(builder);
+			
 		}
     }
 }

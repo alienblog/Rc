@@ -4,7 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Hosting.Internal;
+using Microsoft.AspNet.Http.Features;
+using Microsoft.AspNet.Server.Features;
 using Microsoft.Extensions.Configuration;
+using Rc.Core.Ioc;
 
 namespace Rc
 {
@@ -16,9 +19,11 @@ namespace Rc
             builder.AddCommandLine(args);
             var config = builder.Build();
             
-            using(var app = CreateWebHost(config)){
+            using(var app = CreateWebHost(config))
+            {
+	            var serverAddresses = app.ServerFeatures.Get<IServerAddressesFeature>();
                 Console.BackgroundColor = ConsoleColor.Black;
-                Console.WriteLine("I'm running...");
+	            Console.WriteLine("I'm running... listen on {0}", string.Join(",", serverAddresses.Addresses));
                 Console.ReadLine();
             }
         }

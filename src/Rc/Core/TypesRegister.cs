@@ -1,33 +1,48 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Builder;
 using Autofac.Features.Scanning;
+using Microsoft.Extensions.PlatformAbstractions;
 using Rc.Core.Impl;
 
 namespace Rc.Core
 {
     public class TypesRegister
     {
-        public void RegisterAll(ContainerBuilder builder)
+	    private Assembly[] _assemblies;
+
+	    public void RegisterAll(ContainerBuilder builder,ILibraryManager libraryManager)
         {
-            var assemblies = GetAssemblies();
+	        var libraries = libraryManager.GetLibraries();
+	        _assemblies = GetAssemblies(libraries);
             RegisterTypes(builder,typeof(ISingletonDependency)).SingleInstance();
             RegisterTypes(builder,typeof(ITransientDependency)).InstancePerLifetimeScope();
             
-            foreach(var assembly in assemblies)
+            foreach(var assembly in _assemblies)
             {
                 var types = assembly.GetTypes();
                 Mapper.MapperBootstrapper.ConfigureMapper(types);
             }
         }
 
-        private Assembly[] GetAssemblies()
+        private Assembly[] GetAssemblies(IEnumerable<Library> libraries)
         {
-            var refs = new[] { "Rc" };
+			var assemblies = new List<Assembly>();
+			foreach (var library in libraries)
+			{
+				try
+				{
+					assemblies.Add(Load(library.Name));
+				}
+				catch
+				{
+				}
+			}
 
-            return refs.Select(Load).ToArray();
+	        return assemblies.ToArray();
         }
 
         private Assembly Load(string name)
@@ -37,7 +52,7 @@ namespace Rc.Core
 
         private IRegistrationBuilder<object,ScanningActivatorData,DynamicRegistrationStyle> RegisterTypes(ContainerBuilder builder,Type baseType)
         {
-            return builder.RegisterAssemblyTypes(GetAssemblies())
+            return builder.RegisterAssemblyTypes(_assemblies)
                    .Where(t => baseType.IsAssignableFrom(t) && t != baseType)
                    .AsImplementedInterfaces();
         }

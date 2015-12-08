@@ -18,13 +18,17 @@ namespace Rc
 	public class Startup
 	{
 		private readonly Platform _platform;
+		private readonly ILibraryManager _libraryManager;
 		
-		public Startup(IApplicationEnvironment appEnv,IRuntimeEnvironment runtimeEnvironment){
+		public Startup(IApplicationEnvironment appEnv,IRuntimeEnvironment runtimeEnvironment, ILibraryManager libraryManager)
+		{
+			_libraryManager = libraryManager;
+
 			var builder = new ConfigurationBuilder()
 				.SetBasePath(appEnv.ApplicationBasePath)
 				.AddJsonFile("config.json")
 				.AddEnvironmentVariables();
-				
+
 			Configuration = builder.Build();
 			
 			_platform = new Platform(runtimeEnvironment);
@@ -32,7 +36,8 @@ namespace Rc
 		
 		public IConfiguration Configuration { get; private set; }
 		
-		public IServiceProvider ConfigureServices(IServiceCollection services){
+		public IServiceProvider ConfigureServices(IServiceCollection services)
+		{
 			
 			services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 			
@@ -62,8 +67,8 @@ namespace Rc
 						authBuilder.RequireClaim("ManageSite","Allowed");
 					});
 			});
-			
-			RcContainer.Build(services);
+
+			RcContainer.Build(services, _libraryManager);
 			
 			return RcContainer.Resolve<IServiceProvider>();
 		}
