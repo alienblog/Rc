@@ -352,3 +352,7 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
     color: #df8a13;
 }
+
+#fileContainer div span{
+  text-align: center;
+}

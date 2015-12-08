@@ -1,12 +1,13 @@
 {
-	"AppSettings":{
-		"SiteTitle":"Rc",
-		"SubSiteTitle":"Blog Made By ASP.NET5",
-		"Disqus":"helloalien"
+	"AppSettings": {
+		"SiteTitle": "Rc",
+		"SubSiteTitle": "Blog Made By ASP.NET5",
+		"Disqus": "helloalien",
+		"UploadPath": "Uploads"
 	},
 	"DefaultAdminUsername": "admin@zengyinghao.cn",
-    "DefaultAdminPassword": "P@ssw0rd",
-	"Data":{
-		"ConnectionString":"Data Source=rcdb.sqlite"
+	"DefaultAdminPassword": "P@ssw0rd",
+	"Data": {
+		"ConnectionString": "Data Source=rcdb.sqlite"
 	}
 }

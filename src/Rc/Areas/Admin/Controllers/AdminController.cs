@@ -54,5 +54,10 @@ namespace Rc.Areas.Admin.Controllers
 			ViewBag.Categories = await _categoryRepository.GetAllAsync();
             return View();
         }
+        
+        public async Task<IActionResult> File()
+        {
+            return View();
+        }
     }
 }
