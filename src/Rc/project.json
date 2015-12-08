@@ -33,11 +33,11 @@
     "AutoMapper":"4.1.1-*"
   },
 
-  "commands": {
-    "gen": "Microsoft.Extensions.CodeGeneration",
-    "run":"run server.urls=http://localhost:5003 ASPNET_ENV=Development",
-    "ef": "EntityFramework.Commands"
-  },
+    "commands": {
+        "gen": "Microsoft.Extensions.CodeGeneration",
+        "run": "Microsoft.AspNet.Hosting --config hosting.json",
+        "ef": "EntityFramework.Commands"
+    },
 
   "frameworks": {
     "dnxcore50": {

@@ -1,0 +1,5 @@
+﻿{
+	"Hosting:Environment":"Development",
+	"Hosting:Server":"Microsoft.AspNet.Server.WebListener",
+	"server.urls":"http://localhost:5003"
+}
