@@ -22,6 +22,8 @@ namespace Rc.Services.Dtos
 
         public string Content { get; set; }
 
+        public bool IsDraft { get; set; }
+
         public int CategoryId { get; set; }
 
         public string CategoryName { get; set; }

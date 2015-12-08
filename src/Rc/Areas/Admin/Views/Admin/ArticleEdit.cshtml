@@ -34,7 +34,7 @@
 				<input type="hidden" name="articleId" value="@article.Id">
 				<div class="row">
 					<div class="form-group">
-						<div class="col-md-7">
+						<div class="col-md-5">
 							<div class="input-group">
 								<span class="input-group-addon">标题</span>
 								<input type="text" class="form-control" name="title" value="@article.Title">
@@ -46,8 +46,9 @@
 								<input type="text" class="form-control" name="picUrl" value="@article.PicUrl">
 							</div>
 						</div>
-						<div class="col-md-1">
-							<button type="button" class="btn btn-primary col-md-offset-4" id="btn_save">保存</button>
+						<div class="col-md-3">
+							<button type="button" class="btn btn-primary col-md-5" id="btn_save">保存</button>
+							<button type="button" class="btn btn-warning col-md-5 col-md-offset-1" id="btn_save_draft">保存草稿</button>
 						</div>
 					</div>
 				</div>

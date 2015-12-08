@@ -9,7 +9,7 @@ namespace Rc.Models
     {
         [Required]
         public string Title { get; set; }
-        
+
         public string Summary { get; set; }
 
         public string PicUrl { get; set; }
@@ -17,6 +17,8 @@ namespace Rc.Models
         public string Markdown { get; set; }
 
         public string Content { get; set; }
+
+        public bool IsDraft { get; set; } = true;
 
         [JsonIgnore]
         public Category Category { get; set; }

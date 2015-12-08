@@ -24,7 +24,7 @@ namespace Rc.Areas.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(int limit, int offset)
         {
-            var pagedList = await _contentServices.GetPagedArticles(limit, offset);
+            var pagedList = await _contentServices.GetPagedArticles(limit, offset,true);
 
             pagedList.Rows = pagedList.Rows.Select(item =>
             {

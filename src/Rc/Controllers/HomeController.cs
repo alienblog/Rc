@@ -77,7 +77,7 @@ namespace Rc.Controllers
 
         private async Task<PagedList<ArticleDto>> GetArticles(int? cid, int page = 1)
         {
-            var queryable = _articleRepository.AsQueryable();
+            var queryable = _articleRepository.AsQueryable().Where(x => !x.IsDraft);
             if (cid.HasValue)
             {
                 queryable = queryable.Where(x => x.Category.Id == cid);
@@ -87,7 +87,7 @@ namespace Rc.Controllers
             page = page < 1 ? 1 : page;
             var skipCount = (page - 1) * PageSize;
 
-            var data = await queryable.OrderByDescending(a=>a.CreatedDate).Skip(skipCount).Take(PageSize).ToListAsync();
+            var data = await queryable.OrderByDescending(a => a.CreatedDate).Skip(skipCount).Take(PageSize).ToListAsync();
 
             return new PagedList<ArticleDto>(data.ToDto(), PageSize, page, totalCount);
         }

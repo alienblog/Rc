@@ -8,12 +8,12 @@ namespace Rc.Services
 {
     public interface IContentServices : IRcServices
     {
-        Task<PagedList<ArticleDto>> GetPagedArticles(int limit, int offset);
+        Task<PagedList<ArticleDto>> GetPagedArticles(int limit, int offset, bool includeDraft = false);
 
         Task<ArticleDto> CreateArticle(InputArticleDto input);
 
         Task<ArticleDto> UpdateArticle(InputArticleDto input);
-        
+
         void DeleteArticle(int id);
     }
 }

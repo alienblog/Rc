@@ -198,9 +198,12 @@ admin.article.edit = {};
                     }, {
                         field: 'CategoryName',
                         title: '分类'
-                    },{
+                    }, {
                         field: 'CreatedDateString',
                         title: '创建时间'
+                    },{
+                        field: 'IsDraft',
+                        title: '草稿'
                     }]
             });
         }
@@ -290,24 +293,24 @@ admin.article.edit = {};
                 imageUpload: true,
                 imageUploadURL: '/api/File'
             });
-            
-            
+
+
             var id = $('input[name="articleId"]').val();
             var tagUrl = '/api/Tag';
-            if(id){
-                tagUrl+="?id="+id;
+            if (id) {
+                tagUrl += "?id=" + id;
             }
-            $.get(tagUrl,function(result){
-                
-                var suggestions=[];
+            $.get(tagUrl, function (result) {
+
+                var suggestions = [];
                 var tags = [];
-                if(result.allTags){
-                    suggestions = result.allTags.map(function(t){
+                if (result.allTags) {
+                    suggestions = result.allTags.map(function (t) {
                         return t.Name;
                     });
                 }
-                if(result.tags){
-                    tags = result.tags.map(function(t){
+                if (result.tags) {
+                    tags = result.tags.map(function (t) {
                         return t.Name;
                     });
                 }
@@ -334,48 +337,58 @@ admin.article.edit = {};
             postdata.Markdown = editor.getMarkdown();
             postdata.Content = editor.getHTML();
             postdata.PicUrl = $('input[name="picUrl"]').val();
-            postdata.Tags = tagCtl.getTags().map(function(t){
-               return {Name:t} 
+            postdata.Tags = tagCtl.getTags().map(function (t) {
+                return { Name: t }
             });
-            if(!postdata.PicUrl){
+            if (!postdata.PicUrl) {
                 postdata.PicUrl = getPicUrl(postdata.Markdown);
             }
         };
-        
-        function getPicUrl(md){
+
+        function getPicUrl(md) {
             var reg = /\/Uploads[\S]+.[\w]/;
             var results = reg.exec(md);
-            if(results && results.length>0){
+            if (results && results.length > 0) {
                 return results[0];
             }
             return "";
         }
 
+        function saveArticle() {
+            applyData();
+            $.ajax({
+                type: "post",
+                url: "/api/Article",
+                data: postdata,
+                success: function (data, status) {
+                    if (status == "success") {
+                        if (data.success) {
+                            $('input[name="articleId"]').val(data.Id);
+                            toastr.success('提交数据成功');
+                        } else {
+                            toastr.error(data.errorMessage);
+                        }
+                    }
+                },
+                error: function () {
+                    toastr.error('Error');
+                },
+                complete: function () {
+
+                }
+
+            });
+        }
+
         oInit.init = function () {
             $('#btn_save').click(function () {
-                applyData();
-                $.ajax({
-                    type: "post",
-                    url: "/api/Article",
-                    data: postdata,
-                    success: function (data, status) {
-                        if (status == "success") {
-                            if (data.success) {
-                                $('input[name="articleId"]').val(data.Id);
-                                toastr.success('提交数据成功');
-                            } else {
-                                toastr.error(data.errorMessage);
-                            }
-                        }
-                    },
-                    error: function () {
-                        toastr.error('Error');
-                    },
-                    complete: function () {
-
-                    }
-
-                });
+                postdata.IsDraft = false;
+                saveArticle();
+            });
+            
+            $('#btn_save_draft').click(function(){
+                postdata.IsDraft = true;
+                saveArticle();
             });
 
             $('#btn_edit').click(function () {

@@ -14,9 +14,10 @@ namespace Rc.Services
 {
     public partial class ContentServices
     {
-        public async Task<PagedList<ArticleDto>> GetPagedArticles(int limit, int offset)
+        public async Task<PagedList<ArticleDto>> GetPagedArticles(int limit, int offset, bool includeDraft = false)
         {
-            var pagedArticle = await _articleRepository.GetPagedAsync(limit, offset);
+
+            var pagedArticle = await _articleRepository.GetPagedAsync(limit, offset, a => a.Where(x => x.IsDraft == includeDraft || !x.IsDraft));
 
             return new PagedList<ArticleDto>(
                     pagedArticle.Rows.Map<IList<ArticleDto>>(),
@@ -59,10 +60,10 @@ namespace Rc.Services
 
             return result.Map<ArticleDto>();
         }
-        
+
         public void DeleteArticle(int id)
         {
-             _articleRepository.Remove(id);
+            _articleRepository.Remove(id);
         }
 
         private async Task AddTags(Article entity, IList<TagDto> tags)
